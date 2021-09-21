@@ -63,10 +63,34 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        getWeatherForCurrentLocation();
+//    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
-        getWeatherForCurrentLocation();
+        Intent mIntent=getIntent();
+        String city = mIntent.getStringExtra("City");
+        if (city!=null)
+        {
+            getWeatherForNewCity(city);
+        }
+
+        else
+        {
+            getWeatherForCurrentLocation();
+        }
+    }
+
+    private void getWeatherForNewCity(String city){
+        RequestParams params = new RequestParams();
+        params.put("q",city);
+        params.put("appid",APP_ID);
+        letsdoSomeNetworking(params);
     }
 
     private void getWeatherForCurrentLocation() {
@@ -186,6 +210,11 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         if(mLocationManager!=null){
             mLocationManager.removeUpdates(mLocationListener);
+        }
+    }
+
+    private class AsyncHttpClient {
+        public void get(String weather_url, RequestParams params, JsonHttpResponseHandler data_get_success) {
         }
     }
 }
