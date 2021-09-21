@@ -12,11 +12,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,6 +79,14 @@ public class MainActivity extends AppCompatActivity {
                 String Latitude = String.valueOf(location.getLatitude());
                 String Longitude = String.valueOf(location.getLongitude());
 
+
+                RequestParams params =new RequestParams();
+                params.put("lat",Latitude);
+                params.put("lon",Longitude);
+                params.put("appid",APP_ID);
+                letsdoSomeNetworking(params);
+
+
             }
 
 //            @Override
@@ -127,5 +138,30 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+
+
+    }
+
+    private void letsdoSomeNetworking(RequestParams params)
+    {
+       AsyncHttpClient client = new AsyncHttpClient();
+       client.get(WEATHER_URL,params,new JsonHttpResponseHandler(){
+
+           @Override
+            public void onSuccess(@NonNull int statusCode, PreferenceActivity.Header[] headers, JSONObject response) {
+//               super.onSuccess(statusCode,headers,response);
+
+               Toast.makeText(MainActivity.this,"Data get success",Toast.LENGTH_SHORT).show();
+
+            }
+
+           @Override
+           public void onFailure(@NonNull int statusCode, PreferenceActivity.Header[] headers,Throwable throwable, JSONObject errorResponse) {
+
+           }
+
+
+       });
+
     }
 }
