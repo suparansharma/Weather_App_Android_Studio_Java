@@ -1,9 +1,5 @@
 package com.example.weather_app_android_studio_java;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -12,14 +8,23 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
 import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -105,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 RequestParams params =new RequestParams();
+
                 params.put("lat",Latitude);
                 params.put("lon",Longitude);
                 params.put("appid",APP_ID);
@@ -172,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
        AsyncHttpClient client = new AsyncHttpClient();
        client.get(WEATHER_URL,params,new JsonHttpResponseHandler(){
 
-           @Override
+/*           @Override
             public void onSuccess(@NonNull int statusCode, PreferenceActivity.Header[] headers, JSONObject response) {
 //               super.onSuccess(statusCode,headers,response);
 
@@ -180,14 +186,21 @@ public class MainActivity extends AppCompatActivity {
                weatherData weatherD=weatherData.fromJson(response);
                updateUI(weatherD);
 
-            }
+            }*/
 
            @Override
-           public void onFailure(@NonNull int statusCode, PreferenceActivity.Header[] headers,Throwable throwable, JSONObject errorResponse) {
-
+           public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+               super.onSuccess(statusCode, headers, response);
+               Toast.makeText(MainActivity.this,"Data get success",Toast.LENGTH_SHORT).show();
+               weatherData weatherD=weatherData.fromJson(response);
+               updateUI(weatherD);
            }
 
-
+           @Override
+           public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+               super.onFailure(statusCode, headers, responseString, throwable);
+               Toast.makeText(MainActivity.this,"Can not find",Toast.LENGTH_SHORT).show();
+           }
        });
 
     }
@@ -213,8 +226,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class AsyncHttpClient {
-        public void get(String weather_url, RequestParams params, JsonHttpResponseHandler data_get_success) {
-        }
-    }
 }
