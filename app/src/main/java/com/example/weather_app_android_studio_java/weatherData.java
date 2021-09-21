@@ -33,42 +33,42 @@ public class weatherData {
         if (condition>=0 && condition<=300){
             return "thunderstrom";
         }
-        if (condition>=300 && condition<=500){
+        else if (condition>=300 && condition<=500){
             return "lightrain";
         }
 
-        if (condition>=500 && condition<=600){
+        else if (condition>=500 && condition<=600){
             return "shower";
         }
 
-        if (condition>=600 && condition<=700){
+        else if (condition>=600 && condition<=700){
             return "snow2";
         }
 
-        if (condition>=701 && condition<=771){
+        else if (condition>=701 && condition<=771){
             return "fog";
         }
 
-        if (condition>=772 && condition<=800){
+        else if (condition>=772 && condition<=800){
             return "overcast";
         }
 
-        if (condition==800){
+        else if (condition==800){
             return "sunny";
         }
-        if (condition>=801 && condition<=804){
+        else if (condition>=801 && condition<=804){
             return "cloudy";
         }
 
-        if (condition>=900 && condition<=902){
+        else if (condition>=900 && condition<=902){
             return "thunderstrom1";
         }
-        if (condition==903)
+        else if (condition==903)
         {
             return "snow1";
         }
 
-        if (condition==904)
+        else if (condition==904)
         {
             return "sunny";
         }

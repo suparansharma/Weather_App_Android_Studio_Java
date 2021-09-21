@@ -24,7 +24,7 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
 
     final String APP_ID = "805af68c71f238865fc5e9b2614a0e87";
-    final String WEATHER_URL = "https://home.openweathermap.org/data/2.5/weather";
+    final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
 
     final long MIN_TIME = 5000;
     final float MIN_DISTANCE = 1000;
@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
             return;
         }
         mLocationManager.requestLocationUpdates(Location_Provider, MIN_TIME, MIN_DISTANCE, mLocationListener);
@@ -152,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
 //               super.onSuccess(statusCode,headers,response);
 
                Toast.makeText(MainActivity.this,"Data get success",Toast.LENGTH_SHORT).show();
+               weatherData weatherD=weatherData.fromJson(response);
+               updateUI(weatherD);
 
             }
 
@@ -163,5 +166,26 @@ public class MainActivity extends AppCompatActivity {
 
        });
 
+    }
+
+    private void updateUI(weatherData weather){
+        Temperature.setText(weather.getmTemperature());
+        NameofCity.setText(weather.getMcity());
+        weatherState.setText(weather.getmTemperature());
+        int resourceID = getResources().getIdentifier(weather.getMicon(),"drawable",getPackageName());
+        mweatherIcon.setImageResource(resourceID);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Dispatch onPause() to fragments.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mLocationManager!=null){
+            mLocationManager.removeUpdates(mLocationListener);
+        }
     }
 }
